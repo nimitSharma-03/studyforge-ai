@@ -1,0 +1,5 @@
+-r requirements.txt
+pytest==8.3.4
+ruff==0.8.6
+# Browser end-to-end script (scripts/e2e_smoke.py); run `python -m playwright install chromium` once.
+playwright==1.49.1

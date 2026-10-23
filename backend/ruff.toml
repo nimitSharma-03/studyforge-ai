@@ -1,0 +1,7 @@
+line-length = 120
+target-version = "py311"
+extend-exclude = [".venv"]
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP", "BLE"]
+ignore = ["B008"]  # FastAPI dependency injection uses calls in defaults

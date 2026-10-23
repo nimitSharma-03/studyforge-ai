@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens (RGB channels so Tailwind can apply opacity). */
+:root {
+  --canvas: 247 248 251;
+  --surface: 255 255 255;
+  --subtle: 241 243 248;
+  --line: 228 231 239;
+  --line-strong: 205 210 222;
+  --ink: 15 23 42;
+  --body: 51 60 80;
+  --muted: 100 110 132;
+
+  --navy: 30 27 75;
+  --navy-soft: 49 46 129;
+
+  --brand-50: 238 242 255;
+  --brand-100: 224 231 255;
+  --brand-200: 199 210 254;
+  --brand-300: 165 180 252;
+  --brand-500: 99 102 241;
+  --brand-600: 79 70 229;
+  --brand-700: 67 56 202;
+  --brand-800: 55 48 163;
+
+  --success: 5 150 105;
+  --success-soft: 236 253 245;
+  --success-ink: 6 95 70;
+  --danger: 220 38 38;
+  --danger-soft: 254 242 242;
+  --danger-ink: 153 27 27;
+  --warning: 217 119 6;
+  --warning-soft: 255 251 235;
+  --warning-ink: 146 64 14;
+  --info: 37 99 235;
+  --info-soft: 239 246 255;
+  --info-ink: 30 64 175;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-canvas text-body font-sans text-[15px] leading-6;
+  }
+  h1, h2, h3, h4 {
+    @apply text-ink tracking-tight;
+  }
+  ::selection {
+    background: rgb(var(--brand-100));
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--brand-500));
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink;
+  }
+  .field {
+    @apply block w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-sm text-ink shadow-xs
+      placeholder:text-muted/70 transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200
+      disabled:cursor-not-allowed disabled:bg-subtle;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.08em] text-brand-600;
+  }
+}
