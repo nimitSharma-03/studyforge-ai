@@ -80,7 +80,15 @@ function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 function ServerBanner() {
-  const { status, recheck } = useServer();
+  const { status, recheck, health } = useServer();
+  if (status === 'online' && health?.environment === 'production' && health.database_backend === 'sqlite') {
+    return (
+      <Alert tone="warning" title="Temporary storage" className="mb-6">
+        This deployment is currently using temporary server storage, so uploaded materials and results may be cleared when the
+        server restarts.
+      </Alert>
+    );
+  }
   if (status === 'online' || status === 'checking') return null;
   if (status === 'waking') {
     return (

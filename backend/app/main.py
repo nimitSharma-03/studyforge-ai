@@ -25,6 +25,8 @@ logger = logging.getLogger("studyforge")
 async def lifespan(_app: FastAPI):
     settings = get_settings()
     init_db()
+    if settings.is_production and settings.database_url.startswith("sqlite"):
+        logger.warning("Production is using SQLite; data will not survive restarts. Set DATABASE_URL to PostgreSQL.")
     logger.info("StudyForge API %s started (env=%s, docs=%s)", __version__, settings.app_env, settings.docs_enabled)
     yield
 
