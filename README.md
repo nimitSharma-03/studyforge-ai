@@ -9,8 +9,9 @@ StudyForge AI is a document-grounded study platform for college students. Upload
 Everything runs on a CPU with classical, rule-based NLP (TF-IDF, cosine similarity, lexical patterns). No GPU, no model download and no paid API are required.
 
 <!-- LIVE-LINKS -->
-- **Live app:** _deployment pending_
-- **API health:** _deployment pending_
+- **Live app:** https://studyforge-web-4hfn.onrender.com
+- **API health:** https://studyforge-api-o4dl.onrender.com/api/health · **API docs:** https://studyforge-api-o4dl.onrender.com/docs
+- Hosted on Render's free tier: the API sleeps when idle and can take up to a minute to wake on the first request.
 <!-- /LIVE-LINKS -->
 
 ---

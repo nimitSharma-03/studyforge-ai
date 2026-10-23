@@ -63,19 +63,27 @@ export function ExamRunner({ quiz }: { quiz: Quiz }) {
     [answers, quiz.questions],
   );
 
+  const saveTimer = useRef<ReturnType<typeof setTimeout>>();
+  const inFlightSave = useRef<Promise<unknown> | null>(null);
+
   // Autosave shortly after each change so a refresh or lost connection does not lose answers.
   useEffect(() => {
     if (!dirty.current || submitted.current) return;
     setSaveState('saving');
-    const t = setTimeout(async () => {
+    saveTimer.current = setTimeout(async () => {
+      if (submitted.current) return;
+      const save = api.saveResponses(quiz.id, responses());
+      inFlightSave.current = save;
       try {
-        await api.saveResponses(quiz.id, responses());
+        await save;
         setSaveState('saved');
       } catch {
-        setSaveState('error');
+        if (!submitted.current) setSaveState('error');
+      } finally {
+        if (inFlightSave.current === save) inFlightSave.current = null;
       }
     }, 700);
-    return () => clearTimeout(t);
+    return () => clearTimeout(saveTimer.current);
   }, [answers, quiz.id, responses]);
 
   const submit = useCallback(
@@ -84,6 +92,10 @@ export function ExamRunner({ quiz }: { quiz: Quiz }) {
       submitted.current = true;
       setSubmitting(true);
       setError(undefined);
+      // Submission carries every answer, so drop a pending autosave and let an in-flight one finish
+      // first; otherwise a late autosave could reach the server after the quiz is closed.
+      clearTimeout(saveTimer.current);
+      await inFlightSave.current?.catch(() => undefined);
       try {
         await api.submitQuiz(quiz.id, responses(), Math.round((Date.now() - new Date(quiz.created_at).getTime()) / 1000));
         navigate(`/app/practice/${quiz.id}/results${auto ? '?timeout=1' : ''}`, { replace: true });

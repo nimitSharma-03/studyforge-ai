@@ -178,6 +178,19 @@ describe('Quiz', () => {
     expect(await screen.findByTestId('navigated')).toBeInTheDocument();
   });
 
+  it('does not send a late autosave after submitting', async () => {
+    const save = vi.spyOn(api, 'saveResponses').mockResolvedValue(quiz);
+    const submit = vi.spyOn(api, 'submitQuiz').mockResolvedValue(result);
+    renderAt(<ExamRunner quiz={quiz} />, { path: '/app/practice/:quizId', route: '/app/practice/q1' });
+    await userEvent.click(screen.getByRole('radio', { name: /tokenization/i }));
+    await userEvent.click(screen.getAllByRole('button', { name: /^submit$/i })[0]);
+    await userEvent.click(within(await screen.findByRole('dialog')).getByRole('button', { name: /submit quiz/i }));
+    await waitFor(() => expect(submit).toHaveBeenCalled());
+    await new Promise((r) => setTimeout(r, 900)); // longer than the 700 ms autosave debounce
+    expect(save).not.toHaveBeenCalled();
+    expect(submit.mock.calls[0][1][0]).toMatchObject({ question_id: 'a', selected_index: 0 });
+  });
+
   it('displays the server-computed score and explains wrong answers', async () => {
     vi.spyOn(api, 'quizResult').mockResolvedValue(result);
     renderAt(<QuizResults />, { path: '/app/practice/:quizId/results', route: '/app/practice/q1/results' });

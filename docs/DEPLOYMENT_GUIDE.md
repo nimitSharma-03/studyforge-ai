@@ -10,7 +10,22 @@ StudyForge AI deploys as three Render resources:
 
 Nothing is stored on the web service's disk, so Render's ephemeral filesystem is not a problem: uploaded files are processed in memory and discarded, and exports are generated per request.
 
-## Option A — Blueprint (recommended)
+## Current deployment
+
+| Resource | Render name | URL / ID |
+| --- | --- | --- |
+| Static site | `studyforge-web` | https://studyforge-web-4hfn.onrender.com |
+| API | `studyforge-api` | https://studyforge-api-o4dl.onrender.com (`/api/health`, `/docs`) |
+| Database | `studyforge-db` (free, Singapore, PostgreSQL 16) | `dpg-dbds0fdg1s2s73at2oug-a` — free instance expires 2026-11-22 unless upgraded |
+
+These services were created through Render's API tooling rather than the Blueprint, because that tooling does not expose rewrite rules, root directories or database links. Differences from `render.yaml`:
+
+- Build/start commands `cd backend` / `cd frontend` instead of using `rootDir`; the static site publishes `frontend/dist`.
+- **SPA deep links** are served through `dist/404.html` (a copy of `index.html` written by `frontend/scripts/spa-fallback.mjs`). The app loads correctly, but the HTTP status of a direct deep-link request is 404. To return 200, add a rewrite rule in the dashboard: *studyforge-web → Redirects/Rewrites → Source `/*`, Destination `/index.html`, Action Rewrite*.
+- **Database link.** The database password is only available in the dashboard. Until `DATABASE_URL` is set, the API falls back to SQLite on the instance's temporary disk, reports `"database_backend": "sqlite"` in `/api/health`, logs a warning and shows a "Temporary storage" notice in the app. To switch to PostgreSQL: *studyforge-db → Connect → copy the Internal Database URL*, then *studyforge-api → Environment → add `DATABASE_URL`* with that value and save (Render redeploys automatically). Tables are created on start-up; verify that `/api/health` reports `"database_backend": "postgresql"`.
+- No health-check path is configured on the API service (also not exposed by the tooling); set it to `/api/health` under *Settings → Health Checks* if desired.
+
+## Option A — Blueprint (recommended for new deployments)
 
 1. Push the repository to GitHub.
 2. In the Render dashboard choose **New → Blueprint**, connect the repository and confirm. Render reads [`render.yaml`](../render.yaml) and creates all three resources, wiring `DATABASE_URL` from the database into the API.

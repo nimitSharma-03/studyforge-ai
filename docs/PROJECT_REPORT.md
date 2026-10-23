@@ -7,7 +7,7 @@ Author: Nimit Sharma · Version 1.0.0 · October 2026
 
 ## Abstract
 
-Students preparing for semester examinations must turn large volumes of lecture notes into revision material and practice questions. General-purpose chatbots can help, but they answer from general knowledge rather than the course as taught, and may produce confident but incorrect statements. This project presents **StudyForge AI**, a web platform that processes a student's own PDF, DOCX and PPTX files with a deterministic, CPU-only NLP pipeline. The system extracts text with page and slide metadata, segments it into topics using document structure (with a TextTiling-style fallback), ranks keyphrases with TF-IDF, extracts definitions with lexical patterns, builds extractive learning guides using TF-IDF centrality and maximal marginal relevance, answers questions by TF-IDF retrieval with an explicit evidence verdict, and generates multiple-choice, short-answer and long-answer questions that pass automatic validation rules. A quiz engine with server-side scoring supports mid- and end-semester practice tests, and progress analytics identify weak topics only when enough answers exist. On a synthetic nine-section set of lecture notes the pipeline produced 9 topics and 106 validated questions in about 0.2 s per document, with identical results from the PDF, DOCX and PPTX versions. The application is implemented with FastAPI and React, covered by 80 backend and 15 frontend automated tests plus a browser end-to-end test, and deployed on Render.
+Students preparing for semester examinations must turn large volumes of lecture notes into revision material and practice questions. General-purpose chatbots can help, but they answer from general knowledge rather than the course as taught, and may produce confident but incorrect statements. This project presents **StudyForge AI**, a web platform that processes a student's own PDF, DOCX and PPTX files with a deterministic, CPU-only NLP pipeline. The system extracts text with page and slide metadata, segments it into topics using document structure (with a TextTiling-style fallback), ranks keyphrases with TF-IDF, extracts definitions with lexical patterns, builds extractive learning guides using TF-IDF centrality and maximal marginal relevance, answers questions by TF-IDF retrieval with an explicit evidence verdict, and generates multiple-choice, short-answer and long-answer questions that pass automatic validation rules. A quiz engine with server-side scoring supports mid- and end-semester practice tests, and progress analytics identify weak topics only when enough answers exist. On a synthetic nine-section set of lecture notes the pipeline produced 9 topics and 106 validated questions in about 0.2 s per document, with identical results from the PDF, DOCX and PPTX versions. The application is implemented with FastAPI and React, covered by 80 backend and 16 frontend automated tests plus a browser end-to-end test, and deployed on Render.
 
 ## 1. Introduction
 
@@ -78,14 +78,14 @@ A complete description with formulas and parameters is given in [NLP_METHODOLOGY
 | --- | --- | --- | --- |
 | Backend unit and API tests | pytest | 80 | 80 passed |
 | Backend lint/format | Ruff | — | clean |
-| Frontend component/integration tests | Vitest + React Testing Library | 15 | 15 passed |
+| Frontend component/integration tests | Vitest + React Testing Library | 16 | 16 passed |
 | Frontend lint and types | ESLint, `tsc --noEmit` | — | clean |
 | Production build | Vite | — | succeeded |
-| End-to-end workflow | Playwright (Chromium) | 9 steps | passed locally against the production build |
+| End-to-end workflow | Playwright (Chromium) | 9 steps | passed locally (production build) and against the live Render deployment |
 
 Backend tests cover all three extractors, invalid and corrupted files, empty and scanned PDFs, header removal, normalisation, both segmentation strategies, chunk boundaries, keyphrases, definitions, guide citations, MCQ structure, every validator rule, retrieval ranking and QA verdicts, upload limits, quotas, rate limiting, duplicate detection, cross-workspace isolation, cascade deletion, question bank filters, exports, answer hiding in exam mode, scoring with correct/incorrect/unanswered items, ignored client score fields, duplicate and concurrent submissions, autosave, mode-specific question selection, retries, progress thresholds and resolution of corrected mistakes.
 
-Frontend tests cover the landing page, navigation, dashboard empty and populated states, backend-unavailable handling, materials listing and deletion confirmation, client- and server-side upload errors, topic switching in the learning view, quiz interaction and the exact submission payload, result display and the API client's token and error handling.
+Frontend tests cover the landing page, navigation, dashboard empty and populated states, backend-unavailable handling, materials listing and deletion confirmation, client- and server-side upload errors, topic switching in the learning view, quiz interaction and the exact submission payload, absence of a late autosave after submission (a race first observed in the live end-to-end run), result display and the API client's token and error handling.
 
 ## 9. Results
 
