@@ -8,7 +8,7 @@ Prepared answers for project evaluation. Answers describe what the code actually
 It turns a student's own unstructured lecture material into organised topics, revision guides and practice questions that are traceable to the source page or slide, so exam preparation is grounded in the syllabus actually taught rather than in a chatbot's general knowledge.
 
 **2. Why rule-based NLP instead of a large language model?**
-The requirements were CPU-only deployment, no mandatory model download, no paid API and no fabricated content. Rule-based extraction and classical statistics run in under a second per document on a free cloud instance, are deterministic (the same notes always give the same output) and every output sentence can be traced to the input. The trade-off is less fluent, less flexible output. An optional local LLM adapter (Ollama) is provided but never required.
+The requirements were CPU-only deployment, no mandatory model download, no paid API and no fabricated content. Rule-based extraction and classical statistics process the demo notes in about 0.2 s on a laptop and about 2–2.5 s per upload request on the free cloud instance, are deterministic (the same notes always give the same output) and every output sentence can be traced to the input. The trade-off is less fluent, less flexible output. An optional local LLM adapter (Ollama) is provided but never required.
 
 **3. What does "document-grounded" mean here?**
 Guides are extractive (verbatim sentences), questions are built from source sentences and answers are retrieved passages. Every item carries a page/section/slide reference, and the QA feature explicitly reports when the notes do not contain enough evidence.
@@ -86,7 +86,7 @@ It draws questions from the first half of each selected document's topics, prefe
 Each browser receives a random 256-bit workspace token; only its SHA-256 hash is stored. All queries filter by the workspace resolved from the token, and other workspaces' records return 404. This is anonymous isolation, not full authentication: losing the token means losing access.
 
 **24. Why is processing synchronous?**
-For lecture-sized documents the pipeline takes well under a second. A job queue would need an extra worker and broker that the free hosting tier does not provide. A 120-second deadline protects the server.
+For the demo notes a whole upload request takes about 2–2.5 s on the free instance. A job queue would need an extra worker and broker that the free hosting tier does not provide. A 120-second deadline protects the server.
 
 **25. How is the system tested?**
 pytest covers extraction, NLP components, validation rules, API behaviour, access control, scoring, concurrency and exports; Vitest with React Testing Library covers pages and interactions; a Playwright script runs the full workflow in Chromium. CI runs the unit suites on every push.

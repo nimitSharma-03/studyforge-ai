@@ -94,7 +94,7 @@ sequenceDiagram
   A-->>B: DocumentDetail (real status, warnings, preview, topics)
 ```
 
-Processing is synchronous: for lecture-sized files it takes well under a second, so a background queue would add infrastructure (a worker and broker) without benefit on a single free instance. The 120-second deadline is checked between pipeline stages. The uploaded bytes live only in memory for the request.
+Processing is synchronous: for the nine-section demo notes the pipeline takes about 0.2 s on a laptop and the whole upload request about 2–2.5 s on the free Render instance, so a background queue would add infrastructure (a worker and broker) without benefit on a single free instance. The 120-second deadline is checked between pipeline stages. The uploaded bytes live only in memory for the request.
 
 ### Quiz lifecycle
 

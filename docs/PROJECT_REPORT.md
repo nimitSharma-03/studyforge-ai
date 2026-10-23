@@ -98,7 +98,8 @@ Measured on the bundled synthetic notes (nine sections, 913 words), using a lapt
 | Definitions found | 21 | 21 | 21 |
 | Validated questions (MCQ / short / long) | 106 (57 / 33 / 16) | 106 (57 / 33 / 16) | 106 (57 / 33 / 16) |
 | Candidates rejected after generation | 3 | 3 | 3 |
-| Pipeline time (median of 3) | ≈ 175 ms | ≈ 200 ms | ≈ 183 ms |
+| Pipeline time, laptop CPU (median of 3) | ≈ 175 ms | ≈ 200 ms | ≈ 183 ms |
+| Full upload request on the free Render instance (single run) | — | 2.5 s | 2.1 s |
 
 A heading-less operating-systems text (≈ 410 words over three pages) was split by the fallback segmenter into two topics and yielded 23 validated questions.
 

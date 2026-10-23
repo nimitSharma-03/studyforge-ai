@@ -86,7 +86,7 @@ flowchart LR
   X --> DB
 ```
 
-- The **upload request** runs the whole pipeline synchronously (typically under a second for lecture-sized documents; hard timeout 120 s) and stores the results in one transaction. The original file is discarded.
+- The **upload request** runs the whole pipeline synchronously (about 0.2 s for the demo notes on a laptop and 2–2.5 s on the free Render instance, including upload and storage; hard timeout 120 s) and stores the results in one transaction. The original file is discarded.
 - **Quiz answers are scored on the server**; the exam view of a quiz never includes answer keys.
 - **Isolation:** every browser receives an anonymous workspace token (256-bit random). Only its SHA-256 hash is stored, and every document, question, quiz and progress query is filtered by the owning workspace.
 
